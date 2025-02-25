@@ -8,7 +8,7 @@ Além disso, você pode visualizar a **Tabela de Jogos**, que contém informaç�
 
 ## Jogos
 
-![Jogos](./assets/games.png)
+![Jogos](./games.png)
 
 Com os dados do CSV de jogos da Copa do Mundo, é possível realizar diversas pesquisas interessantes. Por exemplo, é possível comparar o desempenho de diferentes times, como buscar os jogos entre Brasil e Argentina ao longo das edições da Copa. Também é possível filtrar jogos por ano e fase do torneio, como identificar os jogos da fase de grupos da Copa de 1930. Além disso, você pode analisar o desempenho de um time jogando em casa ou fora de casa, verificando, por exemplo, os jogos em que o Brasil foi visitante.
 
@@ -16,7 +16,7 @@ Na imagem, é possível filtrar todos os jogos em que algum time teve 5 gols. O 
 
 ## Edições
 
-![Edições](./assets/editions.png)
+![Edições](./editions.png)
 
 Com os dados da tabela de edições da Copa do Mundo, é possível realizar diversas análises sobre a história do torneio. Por exemplo, você pode investigar quais países sediaram a Copa em diferentes anos, como descobrir que a Copa de 1930 foi realizada no Uruguai e que a Copa de 2018 aconteceu na Rússia. Também é possível comparar o desempenho dos times vencedores ao longo das edições, como identificar o Brasil como o maior vencedor, com várias conquistas ao longo do tempo.
 
