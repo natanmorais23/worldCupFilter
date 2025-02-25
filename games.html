@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>World Cup</title>
+    <link rel="shortcut icon" type="imagex/png" href="https://i.pinimg.com/736x/aa/e1/81/aae1810d59c7908b8b54e5c949b9b2c7.jpg">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Vue CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css">
+    <!-- Vue.js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <!-- Bootstrap Vue JS -->
+    <script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <style>
+        body, html {
+            padding: 0;
+            margin: 0;
+            min-height: 100vh;
+        }
+        #app {
+            background: url('https://images.unsplash.com/photo-1487466365202-1afdb86c764e?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8MjB8fHxlbnwwfHx8fHw%3D');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .custom-table thead th {
+            background-color: #343a40; 
+            color: white;
+        }
+        .custom-table tbody tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .custom-table tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        .custom-table tbody tr:hover {
+            background-color: #d6d6d6; 
+        }
+        img{
+            width: 6%;
+            position: absolute;
+            top: 5vh;
+        }
+        .container{
+            max-width: 100vw;
+        }
+        .container-form{
+            width: 60vw;
+            margin: auto;
+            margin-bottom: 3%;
+        }
+        h1, .container-form{
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <img src="./assets/fifa.png" alt="">
+        <div style="margin-top: 10vh;">
+            <h1>World Cup List</h1>
+        </div>
+
+        <b-container>
+            <div class="container-form">
+                <b-form-group label="Filter:">
+                    <b-form-select v-model="selectedColumn" :options="columnOptions"></b-form-select>
+                </b-form-group>
+                <b-form-group label="Search:">
+                    <b-form-input v-model="filter" placeholder="Search..."></b-form-input>
+                </b-form-group>
+            </div>
+            <div style="color: white;">
+                Cels: {{ qtd_cels }}
+            </div>
+            <b-table
+                :items="filteredItems"
+                :fields="fields"
+                :sort-by.sync="sortBy"
+                :sort-desc.sync="sortDesc"
+                responsive="sm"
+                class="custom-table"
+            >
+                <template v-slot:cell(year)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(country)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(city)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(stage)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(home_team)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(away_team)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(home_score)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(away_score)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(game_goals)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(goals_difference)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+                <template v-slot:cell(outcome)="data">
+                    <b>{{ data.value }}</b>
+                </template>
+            </b-table>
+            <div style="color: white;">
+                Sorting By: <b>{{ sortBy }}</b>, Sort Direction:
+                <b>{{ sortDesc ? 'Descending' : 'Ascending' }}</b>
+            </div>
+        </b-container>
+    </div>
+
+    <script type="text/javascript">
+        new Vue({
+            el: '#app',
+            data: {
+                filter: '',
+                selectedColumn: 'all',
+                sortBy: 'year',
+                sortDesc: false,
+                fields: [
+                    { key: 'year', label: 'Ano', sortable: true },
+                    { key: 'country', label: 'País', sortable: true },
+                    { key: 'city', label: 'Cidade', sortable: true },
+                    { key: 'stage', label: 'Fase', sortable: true },
+                    { key: 'home_team', label: 'Time A', sortable: true },
+                    { key: 'away_team', label: 'Time B', sortable: true },
+                    { key: 'home_score', label: 'Gols A', sortable: true },
+                    { key: 'away_score', label: 'Gols B', sortable: true },
+                    { key: 'game_goals', label: 'Gols do jogo', sortable: true },
+                    { key: 'goals_difference', label: 'Goleadas', sortable: true },
+                    { key: 'outcome', label: 'Resultado', sortable: true }
+                ],
+                columnOptions: [
+                    { value: 'all', text: 'Todos' },
+                    { value: 'year', text: 'Ano' },
+                    { value: 'country', text: 'País sede' },
+                    { value: 'city', text: 'Cidade'},
+                    { value: 'stage', text: 'Fase' },
+                    { value: 'team', text: 'Time' },
+                    { value: 'goals', text: 'Gols' },
+                    { value: 'outcome', text: 'Resultado' }  
+                ],
+                items: [],
+                qtd_cels: 0
+            },
+            computed: {
+                filteredItems() {
+                    const filter = this.filter.toLowerCase();
+                    const column = this.selectedColumn;
+
+                    let filtered = [];
+
+                    if (column === 'all') {
+                        filtered = this.items.filter(item => {
+                            return Object.values(item).some(value =>
+                                value && value.toLowerCase().includes(filter)
+                            );
+                        });
+                    }
+                    else if (column === 'team') {
+                        filtered = this.items.filter(item => {
+                            return ['home_team', 'away_team'].some(field => 
+                                item[field] && item[field].toLowerCase().includes(filter)
+                            );
+                        });
+                    }
+                    else if (column === 'goals') {
+                        filtered = this.items.filter(item => {
+                            return ['home_score', 'away_score'].some(field => 
+                                item[field] && item[field].toLowerCase().includes(filter)
+                            );
+                        });
+                    } 
+                    else {
+                        filtered = this.items.filter(item => {
+                            return item[column] && item[column].toLowerCase().includes(filter);
+                        });
+                    }
+                    this.qtd_cels = filtered.length;
+
+                    return filtered;
+                }
+            },
+            created() {
+                this.loadCSV();
+            },
+            methods: {
+                loadCSV(){
+                    const url = '/wcmatches.csv';
+
+                    Papa.parse(url, {
+                        download: true,
+                        header: true,
+                        complete: (results) => {
+                            this.items = results.data.map(item => {
+                                if(item.outcome === 'A'){
+                                    item.outcome = item.away_team;
+                                }
+                                else if(item.outcome === 'H'){
+                                    item.outcome = item.home_team;
+                                }
+                                else{
+                                    item.outcome = 'Draw';
+                                }
+
+                                if (item.home_score && item.away_score) {
+                                    const game_goals = parseInt(item.home_score) + parseInt(item.away_score);
+                                    item.game_goals = game_goals;
+                                } else {
+                                    item.game_goals = 'N/A';
+                                }
+
+                                if (item.home_score && item.away_score) {
+                                    const goals_difference = Math.abs(parseInt(item.home_score) - parseInt(item.away_score));
+                                    item.goals_difference = goals_difference;
+                                } else {
+                                    item.goals_difference = 'N/A';
+                                }
+
+                                if (item.games && item.home_score) {
+                                    const games = parseInt(item.games, 10);
+                                    const goals = parseInt(item.home_score, 10);
+                                    item.goals_per_game = games > 0 ? (goals / games).toFixed(2) : 'N/A';
+                                } else {
+                                    item.goals_per_game = 'N/A';
+                                }
+                                return item;
+                            });
+                        },
+                        error: (error) => {
+                            console.error('Error loading CSV:', error);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
